@@ -139,10 +139,12 @@ int main()
 			while (capture.isOpened() && cnt <= 501)
 			{
 				std::cout << "the " << cnt << "th frame" << std::endl;
-				std::vector<cv::Point2f> points1, points2;
+				
+				std::vector<cv::Point2f> points1,points2;
 				cv::Mat curImg,tmp;
 				capture >> tmp;
 				cv::cvtColor(tmp, curImg, cv::COLOR_BGR2GRAY);
+				
 				cpmProcess(lastImg, curImg, points1, points2);
 				cv::Mat homo = cv::findHomography(points1, points2,
 					cv::RANSAC, ransac_thresh);
@@ -150,11 +152,13 @@ int main()
 				cv::perspectiveTransform(vertexs, new_vertexs, homo);
 				drawBoundingBox(tmp, new_vertexs);
 				writer << tmp;
-				for (int i = 0; i < 4; i++)
-				{
-					vertexs[i] = new_vertexs[i];
-				}
-				lastImg = curImg.clone();
+				//cv::imshow("tmp", tmp);
+				//cv::waitKey();			
+				//CoarseToFinePatchMatch cpm;
+				//const cv::Mat4f matches = cpm.compute(lastImg, curImg);
+				//cv::Mat draw = cv::Mat::zeros(lastImg.size(), CV_8UC3);
+				//drawOpticalFlow(draw, matches);
+				//writer << draw;
 				cnt++;
 			}
 			const auto t2 = std::chrono::system_clock::now();
